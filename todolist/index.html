@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Todo List</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+  <div class="wrap" id="app">
+    <h1 class="title">Todo List</h1>
+    <!-- 輸入欄位 -->
+    <div class="input">
+      <input type="text" class="inputText" placeholder="新增待辦事項..." v-model="newTodo" @keyup.enter="addTodo">
+      <div class="addBtn material-icons" @click="addTodo">add</div>
+    </div>
+    <ul class="tab">
+      <li :class="{ 'tab-active': page == 'allTodo' }"><a href="#" @click="page = 'allTodo'">全部</a></li>
+      <li :class="{ 'tab-active': page == 'uncompTodo' }"><a href="#" @click="page = 'uncompTodo'">未完成</a></li>
+      <li :class="{ 'tab-active': page == 'compTodo' }"><a href="#" @click="page = 'compTodo'">已完成</a></li>
+    </ul>
+    <!-- 待辦清單 -->
+    <ul class="list">
+      <li v-for="(todo,key) in changePage">
+        <div class="list-todo" v-if="todo.id !== cacheTodo.id">
+          <label>
+            <!-- 切換todo完成狀態 -->
+            <input type="checkbox" class="check" :id="todo.id" v-model="todo.completed">
+            <p>{{todo.content}}</p>
+          </label>
+          <div class="iconBtn material-icons" @click="editTodo(todo)">edit</div>
+          <div class="iconBtn material-icons" @click="removeTodo(todo)">delete</div>
+        </div>
+        <!-- 按下編輯後todo變為輸入欄 -->
+        <div class="list-todo" v-if="todo.id === cacheTodo.id">
+          <input type="text" class="inputText" v-model="cacheContent">
+          <div class="iconBtn material-icons" @click="doneEdit(todo)">done</div>
+          <div class="iconBtn material-icons" @click="cancelEdit(todo)">close</div>
+        </div>
+      </li>
+    </ul>
+  </div>
+  <!-- vue 2 -->
+  <script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
+  <script src="script.js"></script>
+</body>
+
+</html>
